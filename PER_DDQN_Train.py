@@ -3,7 +3,7 @@ import torch.optim as optim
 import numpy as np
 from PER import PER
 from PER_DDQN import DDQN
-from Set_Device import device
+from Main.Set_Device import device
 
 gamma = 0.99
 epsilon = 0.9

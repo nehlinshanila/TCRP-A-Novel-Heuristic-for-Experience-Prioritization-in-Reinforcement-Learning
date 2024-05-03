@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import random
-from Set_Device import device
+from Main.Set_Device import device
 
 
 class DDQN(nn.Module):
