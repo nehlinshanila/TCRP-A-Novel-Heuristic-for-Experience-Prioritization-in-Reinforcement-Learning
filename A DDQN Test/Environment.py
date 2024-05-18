@@ -18,14 +18,14 @@ class Environment:
             r = 0
 
             s_, r, done, truncated, info = self.env.step(a)
-            # s_ = np.array([s[1], processImage(img)])  # last two screens
 
-            r = np.clip(r, -1, 1)  # clip reward to [-1, 1]
+            r = np.clip(r, -1, 1)
 
             if done:  # terminal state
                 s_ = None
 
-            agent.observe((s, a, r, s_))
+            steps = agent.observe((s, a, r, s_))
+            # steps = agent.observe(sample)
             agent.replay()
 
             s = s_
@@ -34,4 +34,4 @@ class Environment:
             if done:
                 break
 
-        print("Total reward:", R)
+        print(f'Total steps: {steps}   |    Total reward: {R}')

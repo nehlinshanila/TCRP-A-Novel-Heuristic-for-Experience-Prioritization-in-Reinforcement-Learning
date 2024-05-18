@@ -40,6 +40,7 @@ class Agent:
 
     def observe(self, sample):  # in (s, a, r, s_) format
         x, y, errors = self._getTargets([(0, sample)])
+        print(f'in observe x: {x} , y: {y}, errors: {errors}')
         self.memory.add(errors[0], sample)
 
         if self.steps % UPDATE_TARGET_FREQUENCY == 0:
@@ -54,16 +55,16 @@ class Agent:
     def _getTargets(self, batch):
         no_state = np.zeros(self.state_size)
 
-        print('batch', batch)
-        state = np.array([o[1][0][0] for o in batch]).reshape(-1)
-        next_state = np.array([(no_state if o[1][3][0] is None else o[1][3][0]) for o in batch])
+        states = np.array([o[1][0] for o in batch])
+        # states = [o[1][0] for o in batch]
+        states_ = np.array([(no_state if o[1][3] is None else o[1][3]) for o in batch])
+        # states_ = [(no_state if o[1][3] is None else o[1][3]) for o in batch]
 
-        # Predict values for states, next_states, and target network
-        print('state in get target', state)
-        p = self.brain.predict(state)
+        p = self.brain.predict(states)
 
-        p_ = self.brain.predict(state, target=False)
-        pTarget_ = self.brain.predict(next_state, target=True)
+        p_ = self.brain.predict(states_, target=False)
+
+        pTarget_ = self.brain.predict(states_, target=True)
 
         x = np.zeros((len(batch), self.state_size))
         y = np.zeros((len(batch), self.action_size))
@@ -76,10 +77,8 @@ class Agent:
             r = o[2]
             s_ = o[3]
 
-            t = p[i]
-
+            t = p[i].copy()
             oldVal = t[a]
-
             if s_ is None:
                 t[a] = r
             else:
@@ -100,13 +99,12 @@ class Agent:
         # update errors
         for i in range(len(batch)):
             idx = batch[i][0]
-
             self.memory.update(idx, errors[i])
 
         self.brain.train(x, y)
 
 
-RANDOM_AGENT_CAPACITY = 50
+RANDOM_AGENT_CAPACITY = 30
 
 
 class RandomAgent:

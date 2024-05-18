@@ -1,5 +1,5 @@
 from Environment import Environment
-from agent import Agent, RandomAgent, MEMORY_CAPACITY
+from agent import Agent, RandomAgent, MEMORY_CAPACITY, RANDOM_AGENT_CAPACITY
 
 if __name__ == "__main__":
 
@@ -15,9 +15,9 @@ if __name__ == "__main__":
 
     try:
         print("Initialization with random agent...")
-        while randomAgent.exp < MEMORY_CAPACITY:
+        while randomAgent.exp < RANDOM_AGENT_CAPACITY:
             env.run(randomAgent)
-            print(randomAgent.exp, "/", MEMORY_CAPACITY)
+            print(randomAgent.exp, "/", RANDOM_AGENT_CAPACITY)
 
         agent.memory = randomAgent.memory
 
@@ -27,4 +27,4 @@ if __name__ == "__main__":
         while True:
             env.run(agent)
     finally:
-        agent.brain.model.save("-DDQN-PER.h5")
+        agent.brain.model.save("DDQN-PER.keras")
