@@ -11,7 +11,7 @@ import datetime
 import tensorflow as tf
 
 # Create TensorBoard callback
-log_dir = "logs/DQN-PONG" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+log_dir = "logs/D-DQN-PONG" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 # alada logs/dqn or Log/ddqn
 tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
 
@@ -91,4 +91,4 @@ while True:
     e += 1
 
 # Save model weights
-agent.save("dqn_pong_model.keras")
+agent.save("d-dqn_pong_model.keras")
