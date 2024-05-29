@@ -28,7 +28,7 @@ class Pong(gym.Wrapper):
     def reset(self, seed=None):
         super().reset(seed=seed)
         observation = self.env.reset()
-        print(f'print observation {len(observation)}')
+        # print(f'print observation {len(observation)}')
         if isinstance(observation, tuple):
             observation = observation[0]  # Adjust based on actual tuple structure
         return self.process_observation(observation)

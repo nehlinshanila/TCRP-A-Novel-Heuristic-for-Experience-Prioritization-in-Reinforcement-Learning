@@ -1,8 +1,8 @@
 import gym
 import numpy as np
 
-# from PER_DQN_Agent import Agent
-from PER_DDQN_Agent import Agent
+from PER_DQN_Agent import Agent
+# from PER_DDQN_Agent import Agent
 from device import device
 from Atari.ATARI.Pong.pong import Pong
 from image_process import preprocess_state
@@ -11,21 +11,15 @@ import datetime
 import tensorflow as tf
 
 # Create TensorBoard callback
-log_dir = "logs/D-DQN" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+log_dir = "logs/DQN-PONG" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 # alada logs/dqn or Log/ddqn
 tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
 
-env = gym.make('CartPole-v1', render_mode='human')
-# env = Pong(render_mode='human', device=device)
+# env = gym.make('CartPole-v1', render_mode='human')
+env = Pong(device=device)
 
-# Print the observation space shape
-# print(f"Observation space shape from env: {env.observation_space.shape}")
+state_size = 84*84
 
-# seed
-# state_size = env.observation_space.shape[0]
-state_size = env.observation_space.shape
-state_size = np.prod(state_size)
-# print(f'state size: {state_size}')
 action_size = env.action_space.n
 
 agent = Agent(state_size, action_size)
@@ -44,32 +38,19 @@ episode_epsilons = []
 # to write the tensorboard logs
 writer = tf.summary.create_file_writer(log_dir)
 e = 1
-
 # for e in range(num_episodes):
 while True:
     state = env.reset(seed=42)
-    # print(f'state for atari: {state}')
-    # print(f'state shape: {state.shape}')  # Print the shape of the initial state
-
-    # if isinstance(state, tuple):
-    #     state = state[0]
-
-    # state = state.flatten()
-    state, state_size = preprocess_state(state)
-    # print(f'state for atari: {state}')
-    # print(f'flattened state shape: {state.shape}')  # Print the shape after flattening
-    # print(f'state size: {tf.size(state)}')
+    state = preprocess_state(state)
+    # print(f'state after process: {state}')
     state = np.reshape(state, [1, state_size])
-    # print(f'state after reshape: {state}')
-
 
     total_reward = 0
     for t in range(max_t):
         action = agent.act(state)
 
         next_state, reward, done, truncated, info = env.step(action)
-        next_state, state_size = preprocess_state(next_state)
-        # next_state = next_state.flatten()
+        next_state = preprocess_state(next_state)
         next_state = np.reshape(next_state, [1, state_size])
 
         # agent.step(state, action, reward, next_state, done or truncated)
@@ -110,4 +91,4 @@ while True:
     e += 1
 
 # Save model weights
-agent.save("ddqn_model.keras")
+agent.save("dqn_pong_model.keras")
