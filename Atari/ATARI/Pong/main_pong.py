@@ -1,6 +1,6 @@
-import torch
 from pong import Pong
 from Main_code.device import device
+
 
 def main():
     # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -16,6 +16,7 @@ def main():
             state = next_state
 
         print(f"Action taken: {action}, Reward: {reward}")
+
 
 if __name__ == '__main__':
     main()
