@@ -4,10 +4,10 @@ import torch
 from PIL import Image
 import torchvision.transforms as T
 
-class DQNPong(gym.Wrapper):
+class Pong(gym.Wrapper):
     def __init__(self, render_mode='rgb_array', device='cpu'):
         env = gym.make("ALE/Pong-v5", render_mode=render_mode)
-        super(DQNPong, self).__init__(env)
+        super(Pong, self).__init__(env)
         self.device = device
         self.transform = T.Compose([
             T.ToPILImage(),
@@ -23,10 +23,12 @@ class DQNPong(gym.Wrapper):
         if isinstance(observation, tuple):
             observation = observation[0]  # Adjust based on actual tuple structure
         processed_observation = self.process_observation(observation)
-        return processed_observation, results[1], results[2], results[3]
+        return processed_observation, results[1], results[2], results[3], results[4]
 
-    def reset(self):
+    def reset(self, seed=None):
+        super().reset(seed=seed)
         observation = self.env.reset()
+        print(f'print observation {len(observation)}')
         if isinstance(observation, tuple):
             observation = observation[0]  # Adjust based on actual tuple structure
         return self.process_observation(observation)

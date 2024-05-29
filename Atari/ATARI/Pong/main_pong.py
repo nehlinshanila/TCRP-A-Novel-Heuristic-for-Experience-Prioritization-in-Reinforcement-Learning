@@ -1,14 +1,15 @@
 import torch
-from pong import DQNPong
+from pong import Pong
+from Main_code.device import device
 
 def main():
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    environment = DQNPong(render_mode='human', device=device)
+    # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    environment = Pong(render_mode='human', device=device)
     state = environment.reset()
 
     while True:
         action = environment.action_space.sample()  # Randomly sample an action
-        next_state, reward, done, _ = environment.step(action)
+        next_state, reward, done, _, _ = environment.step(action)
         if done:
             state = environment.reset()  # Reset the environment if the game is over
         else:
