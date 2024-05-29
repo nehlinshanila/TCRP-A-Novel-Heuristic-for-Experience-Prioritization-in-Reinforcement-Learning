@@ -2,7 +2,7 @@ import gym
 import numpy as np
 
 from PER_DQN_Agent import Agent
-# from Main_code.PER_DDQN_CODE.PER_DDQN_Agent import Agent
+# from PER_DDQN_Agent import Agent
 
 from tensorflow.keras.callbacks import TensorBoard
 import datetime
@@ -10,9 +10,11 @@ import tensorflow as tf
 
 # Create TensorBoard callback
 log_dir = "logs/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+# alada logs/dqn or Log/ddqn
 tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
 
 env = gym.make('CartPole-v1', render_mode='human')
+# seed
 state_size = env.observation_space.shape[0]
 action_size = env.action_space.n
 
@@ -33,7 +35,7 @@ episode_epsilons = []
 writer = tf.summary.create_file_writer(log_dir)
 
 for e in range(num_episodes):
-    state = env.reset()
+    state = env.reset(seed=42)
 
     if isinstance(state, tuple):
         state = state[0]
