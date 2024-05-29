@@ -4,6 +4,7 @@ import torch
 from PIL import Image
 import torchvision.transforms as T
 
+
 class Pong(gym.Wrapper):
     def __init__(self, render_mode='rgb_array', device='cpu'):
         env = gym.make("ALE/Pong-v5", render_mode=render_mode)
@@ -30,11 +31,13 @@ class Pong(gym.Wrapper):
         observation = self.env.reset()
         if isinstance(observation, tuple):
             observation = observation[0]  # Adjust based on actual tuple structure
-        return self.process_observation(observation)
+        return_obs = self.process_observation(observation)
+        return return_obs
 
     def process_observation(self, observation):
         if not isinstance(observation, (np.ndarray, torch.Tensor)):
             raise TypeError(f"Expected observation to be np.ndarray or Tensor, got {type(observation)}")
         observation = self.transform(observation).to(self.device)
-        return observation.unsqueeze(0)  # Add batch dimension
+        return_obs = observation.unsqueeze(0)  # Add batch dimension
+        return return_obs
 

@@ -16,6 +16,7 @@ log_dir = "logs/D-DQN-PONG" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
 
 # env = gym.make('CartPole-v1', render_mode='human')
+
 env = Pong(device=device)
 
 state_size = 84*84
@@ -37,6 +38,7 @@ episode_epsilons = []
 
 # to write the tensorboard logs
 writer = tf.summary.create_file_writer(log_dir)
+
 e = 1
 # for e in range(num_episodes):
 while True:
