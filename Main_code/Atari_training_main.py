@@ -11,12 +11,14 @@ import datetime
 import tensorflow as tf
 
 # Create TensorBoard callback
-log_dir = "logs/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+
+log_dir = "logs/DQN-PONG" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 # alada logs/dqn or Log/ddqn
 tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
 
 # env = gym.make('CartPole-v1', render_mode='human')
-env = Pong( device=device)
+
+env = Pong(device=device)
 
 state_size = 84*84
 
@@ -38,10 +40,12 @@ episode_epsilons = []
 # to write the tensorboard logs
 writer = tf.summary.create_file_writer(log_dir)
 
-for e in range(num_episodes):
+e = 1
+# for e in range(num_episodes):
+while True:
     state = env.reset(seed=42)
     state = preprocess_state(state)
-    print(f'state after process: {state}')
+    # print(f'state after process: {state}')
     state = np.reshape(state, [1, state_size])
 
     total_reward = 0
@@ -87,7 +91,7 @@ for e in range(num_episodes):
             if eval_mean_reward >= max_possible_reward:
                 print(f"\nMaximum possible reward reached! Stopping training......")
                 break
-
+    e += 1
 
 # Save model weights
-agent.save("dqn_model.keras")
+agent.save("dqn_pong_model.keras")

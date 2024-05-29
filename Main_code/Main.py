@@ -1,8 +1,8 @@
 import gym
 import numpy as np
 
-from PER_DQN_Agent import Agent
-# from PER_DDQN_Agent import Agent
+# from PER_DQN_Agent import Agent
+from PER_DDQN_Agent import Agent
 from device import device
 from Atari.ATARI.Pong.pong import Pong
 from image_process import preprocess_state
@@ -11,16 +11,21 @@ import datetime
 import tensorflow as tf
 
 # Create TensorBoard callback
-log_dir = "logs/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+log_dir = "logs/D-DQN" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 # alada logs/dqn or Log/ddqn
 tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
 
-# env = gym.make('CartPole-v1', render_mode='human')
-env = Pong(render_mode='human', device=device)
+env = gym.make('CartPole-v1', render_mode='human')
+# env = Pong(render_mode='human', device=device)
+
+# Print the observation space shape
+# print(f"Observation space shape from env: {env.observation_space.shape}")
 
 # seed
 # state_size = env.observation_space.shape[0]
 state_size = env.observation_space.shape
+state_size = np.prod(state_size)
+# print(f'state size: {state_size}')
 action_size = env.action_space.n
 
 agent = Agent(state_size, action_size)
@@ -38,24 +43,25 @@ episode_epsilons = []
 
 # to write the tensorboard logs
 writer = tf.summary.create_file_writer(log_dir)
+e = 1
 
-for e in range(num_episodes):
+# for e in range(num_episodes):
+while True:
     state = env.reset(seed=42)
-    print(f'state for atari: {state}')
-    print(f'state shape: {state.shape}')  # Print the shape of the initial state
+    # print(f'state for atari: {state}')
+    # print(f'state shape: {state.shape}')  # Print the shape of the initial state
 
     # if isinstance(state, tuple):
     #     state = state[0]
 
     # state = state.flatten()
     state, state_size = preprocess_state(state)
-    print(f'state for atari: {state}')
-    print(f'flattened state shape: {state.shape}')  # Print the shape after flattening
-    print(f'state size: {tf.size(state)}')
-    state = np.reshape(state, [84, 84])
-    print(f'state after reshape: {state}')
+    # print(f'state for atari: {state}')
+    # print(f'flattened state shape: {state.shape}')  # Print the shape after flattening
+    # print(f'state size: {tf.size(state)}')
     state = np.reshape(state, [1, state_size])
-    print(f'state after final reshape: {state}')
+    # print(f'state after reshape: {state}')
+
 
     total_reward = 0
     for t in range(max_t):
@@ -101,7 +107,7 @@ for e in range(num_episodes):
             if eval_mean_reward >= max_possible_reward:
                 print(f"\nMaximum possible reward reached! Stopping training......")
                 break
-
+    e += 1
 
 # Save model weights
-agent.save("dqn_model.keras")
+agent.save("ddqn_model.keras")
