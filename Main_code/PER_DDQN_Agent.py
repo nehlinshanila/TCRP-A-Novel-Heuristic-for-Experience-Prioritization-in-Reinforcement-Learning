@@ -1,4 +1,5 @@
 from Priortized_Replay_Buffer import PrioritizedReplayBuffer, np, random
+from image_process import preprocess_state
 
 from PER_DQN import DQN
 
@@ -101,9 +102,10 @@ class Agent:
         for _ in range(num_episodes):
             state = env.reset()
 
-            if isinstance(state, tuple):
-                state = state[0]
+            # if isinstance(state, tuple):
+            #     state = state[0]
 
+            state = preprocess_state(state)
             state = np.reshape(state, [1, self.state_size])
 
             total_reward = 0
@@ -111,6 +113,7 @@ class Agent:
             while not done:
                 action = np.argmax(self.predict(state))
                 next_state, reward, done, truncated, _ = env.step(action)
+                next_state = preprocess_state(next_state)
                 next_state = np.reshape(next_state, [1, self.state_size])
                 total_reward += reward
                 state = next_state

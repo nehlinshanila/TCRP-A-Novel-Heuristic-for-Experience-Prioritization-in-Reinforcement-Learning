@@ -16,11 +16,10 @@ log_dir = "logs/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
 
 # env = gym.make('CartPole-v1', render_mode='human')
-env = Pong(render_mode='human', device=device)
+env = Pong( device=device)
 
-# seed
-# state_size = env.observation_space.shape[0]
-state_size = env.observation_space.shape
+state_size = 84*84
+
 action_size = env.action_space.n
 
 agent = Agent(state_size, action_size)
@@ -41,29 +40,16 @@ writer = tf.summary.create_file_writer(log_dir)
 
 for e in range(num_episodes):
     state = env.reset(seed=42)
-    print(f'state for atari: {state}')
-    print(f'state shape: {state.shape}')  # Print the shape of the initial state
-
-    # if isinstance(state, tuple):
-    #     state = state[0]
-
-    # state = state.flatten()
-    state, state_size = preprocess_state(state)
-    print(f'state for atari: {state}')
-    print(f'flattened state shape: {state.shape}')  # Print the shape after flattening
-    print(f'state size: {tf.size(state)}')
-    state = np.reshape(state, [84, 84])
-    print(f'state after reshape: {state}')
+    state = preprocess_state(state)
+    print(f'state after process: {state}')
     state = np.reshape(state, [1, state_size])
-    print(f'state after final reshape: {state}')
 
     total_reward = 0
     for t in range(max_t):
         action = agent.act(state)
 
         next_state, reward, done, truncated, info = env.step(action)
-        next_state, state_size = preprocess_state(next_state)
-        # next_state = next_state.flatten()
+        next_state = preprocess_state(next_state)
         next_state = np.reshape(next_state, [1, state_size])
 
         # agent.step(state, action, reward, next_state, done or truncated)
