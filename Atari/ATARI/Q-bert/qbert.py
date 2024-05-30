@@ -36,4 +36,4 @@ class Qbert(gym.Wrapper):
         if not isinstance(observation, (np.ndarray, torch.Tensor)):
             raise TypeError(f"Expected observation to be np.ndarray or Tensor, got {type(observation)}")
         observation = self.transform(observation).to(self.device)
-        return observation.unsqueeze(0)  # Add batch dimension
+        return observation.unsqueeze(0)

@@ -1,23 +1,24 @@
-import gym
+
 import numpy as np
 
-from PER_DQN_Agent import Agent
-# from PER_DDQN_Agent import Agent
+# from PER_DQN_Agent import Agent
+from PER_DDQN_Agent import Agent
 from device import device
-from Atari.ATARI.Pong.pong import Pong
+# from Atari.ATARI.Pong.pong import Pong
+from Atari.ATARI.Qbert.qbert import Qbert
+from Atari.ATARI.Breakout.breakout import Breakout
 from image_process import preprocess_state
 from tensorflow.keras.callbacks import TensorBoard
 import datetime
 import tensorflow as tf
 
 # Create TensorBoard callback
-log_dir = "logs/D-DQN-PONG" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-# alada logs/dqn or Log/ddqn
+
+log_dir = "logs/DDQN-Breakout" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+
 tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
 
-# env = gym.make('CartPole-v1', render_mode='human')
-
-env = Pong(device=device)
+env = Breakout(device=device)
 
 state_size = 84*84
 
@@ -93,4 +94,4 @@ while True:
     e += 1
 
 # Save model weights
-agent.save("d-dqn_pong_model.keras")
+agent.save("ddqn_breakout_model.keras")

@@ -4,10 +4,11 @@ import torch
 from PIL import Image
 import torchvision.transforms as T
 
-class DQNBreakout(gym.Wrapper):
+
+class Breakout(gym.Wrapper):
     def __init__(self, render_mode='rgb_array', device='cpu'):
         env = gym.make("ALE/Breakout-v5", render_mode=render_mode)
-        super(DQNBreakout, self).__init__(env)
+        super(Breakout, self).__init__(env)
         self.device = device
         self.transform = T.Compose([
             T.ToPILImage(),
@@ -19,15 +20,17 @@ class DQNBreakout(gym.Wrapper):
 
     def step(self, action):
         results = self.env.step(action)
-        observation = results[0]
-        reward = results[1]
-        done = results[2]
-        info = results[3] if len(results) > 3 else {}  # Handle cases where more than 4 values might be returned
+        observation = results[0]  # Assume first item is the observation
+        if isinstance(observation, tuple):  # Check if it's a tuple
+            observation = observation[0]  # Use the first item as the actual observation
         processed_observation = self.process_observation(observation)
-        return processed_observation, reward, done, info
+        return processed_observation, results[1], results[2], results[3], results[4]
 
-    def reset(self):
+    def reset(self, seed=None):
+        super().reset(seed=seed)
         observation = self.env.reset()
+        if isinstance(observation, tuple):  # Similar check as in step
+            observation = observation[0]  # Use the first item as the actual observation
         return self.process_observation(observation)
 
     def process_observation(self, observation):
