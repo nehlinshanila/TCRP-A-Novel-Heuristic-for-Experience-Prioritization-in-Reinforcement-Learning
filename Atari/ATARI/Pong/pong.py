@@ -29,14 +29,12 @@ class Pong(gym.Wrapper):
     def reset(self, seed=None):
         super().reset(seed=seed)
         observation = self.env.reset()
-        # print(f'print observation {len(observation)}')
         if isinstance(observation, tuple):
             observation = observation[0]  # Adjust based on actual tuple structure
         return_obs = self.process_observation(observation)
         return return_obs
 
     def process_observation(self, observation):
-        # Check to ensure processing is only applied to appropriate data types
         if not isinstance(observation, (np.ndarray, torch.Tensor)):
             raise TypeError(f"Expected observation to be np.ndarray or Tensor, got {type(observation)}")
         observation = self.transform(observation).to(self.device)

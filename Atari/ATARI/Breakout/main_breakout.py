@@ -1,9 +1,11 @@
 import torch
-from breakout import DQNBreakout
+from breakout import Breakout
+from Main_code.device import device
+
 
 def main():
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    environment = DQNBreakout(render_mode='human', device=device)
+    # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    environment = Breakout(render_mode='human', device=device)
     state = environment.reset()
 
     while True:
