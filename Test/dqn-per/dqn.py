@@ -15,14 +15,14 @@ class DQNAgent:
         self.epsilon_decay = 0.995
         self.dqn_learning_rate = 0.001
         self.model = self._build_model()
-        self.memory = Memory(1000000)  # PER Memory
+        self.memory = Memory(100000)  # PER Memory
         self.batch_size = 32
 
     def _build_model(self):
         # Neural Net for Deep-Q learning Model
         model = Sequential()
-        model.add(Dense(24, input_dim=self.state_size, activation='relu'))
-        model.add(Dense(24, activation='relu'))
+        model.add(Dense(32, input_dim=self.state_size, activation='relu'))
+        model.add(Dense(32, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
         model.compile(loss='mse',
                       optimizer=Adam(learning_rate=self.dqn_learning_rate))
@@ -53,5 +53,5 @@ class DQNAgent:
             target_f[0][action] = target
             # Gradient Update. Pay attention at the sample weight as proposed by the PER Paper
             self.model.fit(state, target_f, epochs=1, verbose=0, sample_weight=np.array([is_weight[i]]))
-        if self.epsilon > self.epsilon_min: # Epsilon Update
+        if self.epsilon > self.epsilon_min:  # Epsilon Update
             self.epsilon *= self.epsilon_decay

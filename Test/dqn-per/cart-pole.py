@@ -25,6 +25,7 @@ writer = tf.summary.create_file_writer(log_dir)
 env = gym.make('CartPole-v1', render_mode='human')
 state_size = env.observation_space.shape[0]
 action_size = env.action_space.n
+
 agent = DQNAgent(state_size, action_size)
 scores = []
 EPISODES = 2000

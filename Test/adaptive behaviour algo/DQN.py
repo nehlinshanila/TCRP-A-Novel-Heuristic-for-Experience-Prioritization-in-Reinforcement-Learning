@@ -16,7 +16,7 @@ class DQNAgent:
         self.dqn_learning_rate = 0.001
         self.model = self._build_model()
 
-        self.memory = Memory(1000000)  # PER Memory
+        self.memory = Memory(100000)  # PER Memory
 
         self.reward_threshold = 5.0  # Threshold for high rewards
         self.action_rewards = {a: [] for a in range(self.action_size)}  # Store rewards for each action
@@ -34,38 +34,45 @@ class DQNAgent:
                       optimizer=Adam(learning_rate=self.dqn_learning_rate))
         return model
 
-    def memorize(self, state, action, reward, next_state, done):
-
-        target = self.model.predict(state)
-        if done:
-            target[0][action] = reward
-        else:
-            next_q_values = self.model.predict(next_state)
-            target[0][action] = reward + self.gamma * np.amax(next_q_values[0])
+    def memorize(self, state, next_state, reward, action, done):
+        # target = self.model.predict(state)
+        # if done:
+        #     target[0][action] = reward
+        # else:
+        #     next_q_values = self.model.predict(next_state)
+        #     target[0][action] = reward + self.gamma * np.amax(next_q_values[0])
 
         # Compute TD-error
-        error = abs(np.real(target[0][action] - self.model.predict(state)[0][action]))
+        # error = abs(np.real(target[0][action] - self.model.predict(state)[0][action]))
+        # td_error = reward + self.gamma * np.argmax(self.model.predict(next_state)[0]) - np.argmax(
+        #     self.model.predict(state)[0])
+        # Calculate TCRP priority for the experience
+        # priority = self.memory.calculate_tcrp_priority(state, next_state, reward)
+        tcrp_value = self.memory.calculate_tcrp_priority(state, next_state, reward)
         """...............keep adding the new experiences in memory..................."""
-        self.memory.add(error, reward, (state, action, reward, next_state, done))
+        # self.memory.add(td_error, reward, (state, action, reward, next_state, done))
+        # self.memory.add(state, next_state, reward, sample=(state, next_state, reward, action, done))
+        self.memory.add(tcrp_value, reward, (state, next_state, reward, action, done))
 
     def act(self, state):
         # Exploration: choose a random action
         if np.random.rand() <= self.epsilon:
             return random.randrange(self.action_size)
-        else:
-            # Exploitation: predict the action based on the Q-values
-            act_values = self.model.predict(state)
 
-            # Reward-based action bias
-            high_reward_actions = self.get_high_reward_actions(state)
+        # Exploitation: predict the action based on the Q-values
+        act_values = self.model.predict(state)
+        action = np.argmax(act_values[0])
 
-            if high_reward_actions:
-                # Add some probability to select actions with high past rewards
-                action = self.bias_towards_high_reward_actions(act_values, high_reward_actions)
-            else:
-                action = np.argmax(act_values[0])
+        # # Reward-based action bias
+        # high_reward_actions = self.get_high_reward_actions(state)
+        #
+        # if high_reward_actions:
+        #     # Add some probability to select actions with high past rewards
+        #     action = self.bias_towards_high_reward_actions(act_values, high_reward_actions)
+        # else:
+        #     action = np.argmax(act_values[0])
 
-            return action
+        return action
 
     def past_rewards_for_action(self, action):
         # Calculate the average reward for the given action
@@ -97,20 +104,40 @@ class DQNAgent:
         # Sample a batch of experiences from memory
         minibatch, idxs, is_weights = self.memory.sample(batch_size)
 
-        for i, (state, action, reward, next_state, done) in enumerate(minibatch):
-            target = self.model.predict(state)
-            if done:
-                target[0][action] = reward
-            else:
-                next_q_values = self.model.predict(next_state)
-                target[0][action] = reward + self.gamma * np.amax(next_q_values[0])
+        # for i, (state, action, reward, next_state, done) in enumerate(minibatch):
+        #     target = self.model.predict(state)
+        #     if done:
+        #         target[0][action] = reward
+        #     else:
+        #         next_q_values = self.model.predict(next_state)
+        #         target[0][action] = reward + self.gamma * np.amax(next_q_values[0])
+        #
+        #     # Compute TD-error
+        #     error = abs(target[0][action] - self.model.predict(state)[0][action])
+        #
+        #     # Update the memory with the new priority that incorporates reward
+        #     self.memory.update(idxs[i], error, reward)
+        #     self.model.train_on_batch(state, target)
+
+        for i in range(batch_size):
+            state, action, reward, next_state, done = minibatch[i]
+            # if not done:
+            #     target = (reward + self.gamma * np.amax(self.model.predict(next_state)[0]))
+            # else:
+            #     target = reward
+
+            target = reward if done else reward + self.gamma * np.amax(self.model.predict(next_state)[0])
+            target_f = self.model.predict(state)
+            target_f[0][action] = target
 
             # Compute TD-error
-            error = abs(target[0][action] - self.model.predict(state)[0][action])
+            # error = abs(target_f[0][action] - self.model.predict(state)[0][action])
 
-            # Update the memory with the new priority that incorporates reward
-            self.memory.update(idxs[i], error, reward)
-            self.model.train_on_batch(state, target)
+            self.memory.soft_update(idxs[i], state, next_state, reward)
+
+            self.model.fit(state, target_f, epochs=1, verbose=0, sample_weight=np.array([is_weights[i]]))
+
+            # self.memory.random_delete()
 
         # Reduce epsilon to encourage exploitation over time
         if self.epsilon > self.epsilon_min:

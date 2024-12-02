@@ -1,14 +1,14 @@
 import gymnasium as gym
+from DDQN import *
 from DQN import *
 
 from tensorflow.keras.callbacks import TensorBoard
 import datetime
 import tensorflow as tf
 
-
 if __name__ == "__main__":
     """..............................for tensorboard logs..................................."""
-    log_dir = "logs/AdaptiveBehavior" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    log_dir = "logs/AdaptiveBehavior_DQN" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
     tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
 
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     action_size = env.action_space.n
 
     agent = DQNAgent(state_size, action_size)
-    agent.set_reward_threshold(250)
+    # agent.set_reward_threshold(5000)
 
     scores = []
     EPISODES = 2000
@@ -41,8 +41,7 @@ if __name__ == "__main__":
         while not done:
             time += 1
             action = agent.act(state)
-            next_state, reward, done, _, _ = env.step(action)
-            reward = reward if not done else -10
+            next_state, reward, done, truncated, _ = env.step(action)
             next_state = np.reshape(next_state, [1, state_size])
 
             agent.memorize(state, action, reward, next_state, done)
@@ -55,7 +54,6 @@ if __name__ == "__main__":
                     print("episode: {}/{}, Score Mean: {} / Median: {} ".format(e, EPISODES, int(np.mean(scores)),
                                                                                 int(np.median(scores))))
                     print("Beta {:.5f} / Eps: {:.5f}".format(agent.memory.beta, agent.epsilon))
-                break
 
         if agent.memory.tree.n_entries > 1000:
             agent.replay(batch_size)
