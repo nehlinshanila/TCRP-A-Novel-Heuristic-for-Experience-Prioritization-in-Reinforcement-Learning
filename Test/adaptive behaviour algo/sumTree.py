@@ -20,11 +20,13 @@ class Memory:
 
     def _get_priority(self, tcrp_value, reward):
         # Calculate a high reward factor (e.g., square root to scale down)
-        reward_factor = (np.abs(reward) + self.epsilon) ** 0.5
+        # reward_factor = (np.abs(reward) + self.epsilon) ** 0.5
 
         # Combine TCRP with high reward factor for final priority
-        combined_priority = (tcrp_value ** self.alpha) * (reward_factor ** self.reward_factor_weight)
-        return combined_priority
+        # combined_priority = (tcrp_value ** self.alpha) * (reward_factor ** self.reward_factor_weight)
+
+        priority = (tcrp_value + self.epsilon) * (reward + self.epsilon) ** self.alpha
+        return priority
 
     def _get_transition_complexity(self, state1, state2):
         # Calculate the Euclidean distance as a measure of transition complexity
