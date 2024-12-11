@@ -5,7 +5,7 @@ import numpy as np
 from PER_DDQN_Agent import Agent
 from device import device
 # from Atari.ATARI.Pong.pong import Pong
-from Atari.ATARI.Qbert.qbert import Qbert
+# from Atari.ATARI.Qbert.qbert import Qbert
 from Atari.ATARI.Breakout.breakout import Breakout
 from image_process import preprocess_state
 from tensorflow.keras.callbacks import TensorBoard
@@ -14,7 +14,7 @@ import tensorflow as tf
 
 # Create TensorBoard callback
 
-log_dir = "logs/DDQN-Breakout" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+log_dir = "logs/DQN-Breakout" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
 tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
 
@@ -94,4 +94,4 @@ while True:
     e += 1
 
 # Save model weights
-agent.save("ddqn_breakout_model.keras")
+agent.save("dqn_Breakout_model.keras")
