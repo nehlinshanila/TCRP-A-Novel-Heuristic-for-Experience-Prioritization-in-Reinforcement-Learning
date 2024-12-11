@@ -1,0 +1,39 @@
+1. Prediction of Menstrual Irregularities
+Target Variable: Cycle(R/I) (Regular/Irregular)
+Potential Predictors: BMI, Cycle_length(days), Age_(yrs), PCOS_(Y/N), FSH(mIU/mL), LH(mIU/mL), AMH(ng/mL), TSH_(mIU/L)
+Purpose: To predict whether a woman is likely to have irregular menstrual cycles based on hormonal and physical factors.
+2. Prediction of Ovulatory Disorders
+Target Variable: FSH/LH ratio or individual hormone levels (FSH(mIU/mL) and LH(mIU/mL))
+Potential Predictors: Age_(yrs), BMI, AMH(ng/mL), PCOS_(Y/N), Cycle_length(days)
+Purpose: To predict ovulatory dysfunction, which is a key symptom of PCOS, affecting fertility.
+3. Impact of Lifestyle Factors on Menstrual Health
+Target Variable: Cycle(R/I) or Pregnant(Y/N)
+Potential Predictors: Fast_food_(Y/N), Reg.Exercise(Y/N), Weight_gain(Y/N), BMI, PCOS_(Y/N)
+Purpose: To analyze how lifestyle factors like diet and exercise impact menstrual regularity and fertility outcomes.
+4. Predicting Risk of Miscarriage
+Target Variable: No._of_abortions
+Potential Predictors: Age_(yrs), BMI, Cycle_length(days), PCOS_(Y/N), AMH(ng/mL), PRG(ng/mL), I___beta-HCG(mIU/mL)
+Purpose: To predict the risk of miscarriage based on age, hormone levels, and the presence of PCOS.
+5. Prediction of Hyperandrogenism
+Target Variable: hair_growth(Y/N), Skin_darkening_(Y/N), Hair_loss(Y/N), Pimples(Y/N)
+Potential Predictors: BMI, PCOS_(Y/N), FSH/LH, AMH(ng/mL), TSH_(mIU/L)
+Purpose: To predict hyperandrogenism (elevated male hormones) in women with PCOS, which leads to symptoms like excess hair growth and acne.
+6. Prediction of Fertility Treatment Outcomes
+Target Variable: Success of pregnancy (Pregnant(Y/N))
+Potential Predictors: FSH(mIU/mL), LH(mIU/mL), Age_(yrs), Cycle_length(days), Follicle_No._(L), Follicle_No._(R), Avg._F_size_(L)_(mm), Avg._F_size_(R)_(mm)
+Purpose: To predict the success of fertility treatments or natural conception for women with PCOS.
+7. Effect of Hormonal Imbalance on Endometrial Health
+Target Variable: Endometrium_(mm) thickness
+Potential Predictors: PCOS_(Y/N), FSH(mIU/mL), LH(mIU/mL), AMH(ng/mL), Cycle_length(days)
+Purpose: To predict abnormalities in endometrial thickness, which is crucial for implantation during pregnancy.
+8. Prediction of Insulin Resistance
+Target Variable: Could create a proxy using variables like BMI, Waist:Hip_Ratio, and PCOS_(Y/N) to identify insulin resistance risk.
+Potential Predictors: BMI, Waist:Hip_Ratio, RBS(mg/dl), PCOS_(Y/N)
+Purpose: Women with PCOS often have insulin resistance; this prediction can be used to identify risk early on.
+These ideas could help you further analyze and predict various health outcomes related to menstrual health and PCOS. If you'd like to implement any of these, I can help with the modeling process!
+
+
+
+5. Causal Inference for Identifying Key Drivers
+and 
+7. Cluster Analysis to Identify PCOS Subtypes
