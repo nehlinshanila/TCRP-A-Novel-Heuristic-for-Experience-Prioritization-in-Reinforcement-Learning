@@ -2,7 +2,20 @@
 
 ## Overview
 
-Transition Complexity and Reward Priority (TCRP) is an innovative reinforcement learning algorithm that optimizes experience replay by combining **transition complexity** and **reward magnitude** into a unified prioritization metric. This approach improves learning efficiency, convergence speed, and policy robustness, making it a significant advancement in reinforcement learning techniques.
+In reinforcement learning, prioritizing experiences
+significantly impacts an agent’s learning efficiency and performance. Transition Complexity
+and Reward Priority (TCRP) algorithm is a novel prioritization
+strategy that integrates transition complexity with reward magnitude to optimize experience replay. TCRP calculates transition
+complexity using a state-space metric (e.g., Euclidean distance)
+to capture environmental changes and combines it with rewardbased prioritization to create a unified priority score. Unlike
+traditional methods such as Proportional Prioritized Experience
+Replay (PER), TCRP adapts to dynamic environments by leveraging both structural transitions and reward-driven insights.
+Experimental results on standard benchmarks like CartPole
+demonstrate that TCRP accelerates learning convergence, improves policy robustness, and achieves higher average rewards
+compared to baseline approaches. Furthermore, TCRP’s inherent
+flexibility makes it suitable for diverse reinforcement learning
+tasks, offering a promising advancement in efficient memory
+prioritization.
 
 ## Features
 - **Dynamic Experience Prioritization**: Combines transition complexity and reward magnitude for better replay efficiency.
