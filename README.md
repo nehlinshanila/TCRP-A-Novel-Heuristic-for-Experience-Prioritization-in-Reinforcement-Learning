@@ -27,14 +27,15 @@ This repository contains the following files and directories:
 ## Getting Started
 
 ### Installation
-1. Clone the repository:
+1. Install the required dependencies:
+   ```bash
+    pip install -r requirements.txt
+2. Clone the repository:
    ```bash
    git clone https://github.com/nehlinshanila/TCRP-A-Novel-Heuristic-for-Experience-Prioritization-in-Reinforcement-Learning.git
    cd TCRP-A-Novel-Heuristic-for-Experience-Prioritization-in-Reinforcement-Learning
    cd adaptive behaviour algo
-1. Install the required dependencies:
-   ```bash
-    pip install -r requirements.txt
+
 
 ## Environments
 
@@ -43,7 +44,7 @@ This repository contains the following files and directories:
 - BipedalWalker
 - CarRacing
 <p align="center">
-<img src="./tests/cartpole.png" height="150em"><img src="./tests/bipedalwalk.png" height="150em"><img src="./tests/carracing.png" height="150em"><img src="./tests/lunarlander.png" height="150em"> 
+<img src="./tests/cartpole.png" height="140em"><img src="./tests/bipedalwalk.png" height="140em"><img src="./tests/carracing.png" height="140em"><img src="./tests/lunarlander.png" height="140em"> 
 </p>
 
 
@@ -113,7 +114,7 @@ This repository contains the following files and directories:
 </html>
 
 <p align="center">
-<img src="tests/training_time_plot.png" height="180em"><img src="tests/total_reward_comparison.png" height="180em"><img src="./tests/epsilon_comparison.png" height="180em">   
+<img src="tests/training_time_plot.png" height="170em"><img src="tests/total_reward_comparison.png" height="170em"><img src="./tests/epsilon_comparison.png" height="170em">   
 </p>
 
 
